@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using MVP_scope_e_shop_API.Data;
 
 namespace MVP_scope_e_shop_API
 {
@@ -13,6 +15,9 @@ namespace MVP_scope_e_shop_API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddDbContext<MVPScopeEshopApiContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             var app = builder.Build();
 

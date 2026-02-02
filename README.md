@@ -1,0 +1,1 @@
+# MVP scope e-shop API

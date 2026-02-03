@@ -4,7 +4,7 @@ GET {{rootURL}}/api/Product
 Accept: application/json
 
 ###
-GET {{rootURL}}/api/Product/1
+GET {{rootURL}}/api/Product/2
 Accept: application/json
 
 ###
@@ -12,11 +12,11 @@ POST {{rootURL}}/api/Product
 Content-Type: application/json
 
 {
-  "name": "Hood",
-  "brand": "Love Mountains",
-  "color": "Green",
-  "size": 4,
-  "gender": "uni",
+  "name": "Jeans",
+  "brand": "Cold Creek",
+  "color": "Blue",
+  "size": 44,
+  "gender": "Men",
   "price": 250,
   "description": ""
 }
@@ -30,11 +30,11 @@ Content-Type: application/json
   "name": "Hood",
   "brand": "Love Mountains",
   "color": "Black",
-  "size": 4,
-  "gender": "uni",
+  "size": 44,
+  "gender": "Men",
   "price": 450,
   "description": ""
 }
 
 ###
-DELETE {{rootURL}}/api/Product/1
+DELETE {{rootURL}}/api/Product/3

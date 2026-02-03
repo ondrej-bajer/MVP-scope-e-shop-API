@@ -3,6 +3,7 @@ using MVP_scope_e_shop_API.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVP_scope_e_shop_API.Migrations
 {
     [DbContext(typeof(MVPScopeEshopApiContext))]
-    partial class MVPScopeEshopApiContextModelSnapshot : ModelSnapshot
+    [Migration("20260203185415_Set price precision")]
+    partial class Setpriceprecision
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

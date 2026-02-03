@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVP_scope_e_shop_API.Data;
 using MVP_scope_e_shop_API.Models;
+using MVP_scope_e_shop_API.Mapping;
+using MVP_scope_e_shop_API.Dtos.Products;
 
 namespace MVP_scope_e_shop_API.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
 
@@ -18,60 +20,79 @@ namespace MVP_scope_e_shop_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<Product>>> GetShirts()
+        public async Task<ActionResult<List<ProductDto>>> GetProducts()
         {
-            return Ok(await _context.Products.ToListAsync());
+            var products = await _context.Products
+                .AsNoTracking()
+                .Select(p => p.ToDto())
+                .ToListAsync();
+
+            return Ok(products);
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Product>> GetShirtById(int id)
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<ProductDto>> GetProductById(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
+            if (id <= 0)
+                return BadRequest("Id must be a positive integer.");
+
+            var productDto = await _context.Products
+                .AsNoTracking()
+                .Where(p => p.Id == id)
+                .Select(p => p.ToDto())
+                .FirstOrDefaultAsync();
+
+            if (productDto == null)
                 return NotFound();
-            return Ok(product);
+
+            return Ok(productDto);
         }
 
         [HttpPost]
-        public async Task<ActionResult<Product>> AddShirt(Product newProduct)
+        public async Task<ActionResult<ProductDto>> AddProduct([FromBody] CreateProductDto dto)
         {
-            if (newProduct == null)
-                return BadRequest();
-            _context.Products.Add(newProduct);
+            var entity = dto.ToEntity();
+
+            _context.Products.Add(entity);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetShirtById), new { id = newProduct.Id }, newProduct);
+
+            var resultDto = entity.ToDto();
+
+            return CreatedAtAction(
+                nameof(GetProductById),
+                new { id = entity.Id },
+                resultDto
+            );
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateBook(int id, Product updatedProduct)
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult<ProductDto>> UpdateProduct(int id, [FromBody] UpdateProductDto dto)
         {
-            var product = await _context.Products.FindAsync(id);
+            if (id <= 0)
+                return BadRequest("Id must be a positive integer.");
+
+            var product = await _context.Products.FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
                 return NotFound();
 
-            product.Id = updatedProduct.Id;
-            product.Name = updatedProduct.Name;
-            product.Brand = updatedProduct.Brand;
-            product.Color = updatedProduct.Color;
-            product.Size = updatedProduct.Size;
-            product.Gender = updatedProduct.Gender;
-            product.Price = updatedProduct.Price;
-            product.Description = updatedProduct.Description;
-
+            dto.Apply(product);
             await _context.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(product.ToDto());
         }
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteBook(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> DeleteProduct(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null)
-                return NotFound();
+            if (id <= 0)
+                return BadRequest("Id must be a positive integer.");
 
-            _context.Products.Remove(product);
-            await _context.SaveChangesAsync();
+            var deleted = await _context.Products
+                .Where(p => p.Id == id)
+                .ExecuteDeleteAsync();
+
+            if (deleted == 0)
+                return NotFound();
 
             return NoContent();
         }

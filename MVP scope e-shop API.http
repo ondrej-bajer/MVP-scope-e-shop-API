@@ -16,7 +16,7 @@ Content-Type: application/json
   "brand": "Cold Creek",
   "color": "Blue",
   "size": 44,
-  "gender": "Men",
+  "gender": "men",
   "price": 250,
   "description": ""
 }
@@ -31,7 +31,7 @@ Content-Type: application/json
   "brand": "Love Mountains",
   "color": "Black",
   "size": 44,
-  "gender": "Men",
+  "gender": "men",
   "price": 450,
   "description": ""
 }

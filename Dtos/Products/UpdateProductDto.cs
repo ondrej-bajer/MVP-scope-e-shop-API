@@ -19,6 +19,7 @@ namespace MVP_scope_e_shop_API.Dtos.Products
         public int Size { get; set; }
 
         [Required, StringLength(20)]
+        [RegularExpression("^(men|women)$", ErrorMessage = "Gender must be 'men' or 'women'.")]
         public string Gender { get; set; } = "";
 
         [Range(0.01, 1000000)]

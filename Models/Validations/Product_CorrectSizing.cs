@@ -4,6 +4,11 @@ namespace MVP_scope_e_shop_API.Models.Validations
 {
     public class Product_CorrectSizing : ValidationAttribute
     {
+        /// <summary>
+        /// Cross validation: minimal size of product based on gender
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="validationContext"></param>
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
             if (value is not IProductSizing model)
@@ -12,7 +17,7 @@ namespace MVP_scope_e_shop_API.Models.Validations
             var gender = model.Gender?.Trim();
 
             if (string.IsNullOrWhiteSpace(gender))
-                return ValidationResult.Success; // nebo vrať chybu, pokud chceš
+                return ValidationResult.Success; // gender is required + value validation (men|women) 
 
             if (gender.Equals("men", StringComparison.OrdinalIgnoreCase) && model.Size < 44)
                 return new ValidationResult("The size of men's products must be 44 or greater.");

@@ -19,6 +19,10 @@ namespace MVP_scope_e_shop_API.Controllers
             _context = context; 
         }
 
+        /// <summary>
+        /// Return back all products
+        /// </summary>
+        /// <returns>List of ProductDto objects</returns>
         [HttpGet]
         public async Task<ActionResult<List<ProductDto>>> GetProducts()
         {
@@ -30,6 +34,13 @@ namespace MVP_scope_e_shop_API.Controllers
             return Ok(products);
         }
 
+        /// <summary>
+        /// Return specific product based on id
+        /// </summary>
+        /// <param name="id">Product identifier (positive integer).</param>
+        /// <response code="200">Product found</response>
+        /// <response code="400">Invalid id</response>
+        /// <response code="404">Product not found</response>
         [HttpGet("{id:int}")]
         public async Task<ActionResult<ProductDto>> GetProductById(int id)
         {
@@ -48,6 +59,13 @@ namespace MVP_scope_e_shop_API.Controllers
             return Ok(productDto);
         }
 
+        /// <summary>
+        /// Creates a new product.
+        /// </summary>
+        /// <param name="dto">The product data to create.</param>
+        /// <returns>The created product with assigned ID.</returns>
+        /// <response code="201">Product successfully created.</response>
+        /// <response code="400">Validation failed.</response>
         [HttpPost]
         public async Task<ActionResult<ProductDto>> AddProduct([FromBody] CreateProductDto dto)
         {
@@ -65,6 +83,14 @@ namespace MVP_scope_e_shop_API.Controllers
             );
         }
 
+        /// <summary>
+        /// Updates an existing product by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the product to update (positive integer).</param>
+        /// <returns>The updated product.</returns>
+        /// <response code="200">Product successfully updated.</response>
+        /// <response code="400">Invalid ID or validation failed.</response>
+        /// <response code="404">Product not found.</response>
         [HttpPut("{id:int}")]
         public async Task<ActionResult<ProductDto>> UpdateProduct(int id, [FromBody] UpdateProductDto dto)
         {
@@ -81,6 +107,13 @@ namespace MVP_scope_e_shop_API.Controllers
             return Ok(product.ToDto());
         }
 
+        /// <summary>
+        /// Deletes a specific product by its ID.
+        /// </summary>
+        /// <param name="id">The ID of the product to delete (positive integer).</param>
+        /// <response code="204">Product successfully deleted.</response>
+        /// <response code="400">Invalid ID.</response>
+        /// <response code="404">Product not found.</response>
         [HttpDelete("{id:int}")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
